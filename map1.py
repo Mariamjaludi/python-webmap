@@ -12,7 +12,7 @@ elevation = list(data["ELEV"])
 name = list(data["NAME"])
 # create map object
 map = folium.Map(location=[37.757536,-122.446517], zoom_start=6, tiles="Stamen Terrain")
-fg =folium.FeatureGroup(name="My Map")
+fg1 =folium.FeatureGroup(name="Volcanoes")
 
 # html for each point:
 html = """<h4>Volcano Information:</h4>
@@ -42,11 +42,15 @@ def country_color_assign(pop2005):
 for lt, ln, elev, name in zip(lat, lon, elevation, name):
     # assign a point for each volcano
     iframe = folium.IFrame(html=html % (name, name, elev), width=200, height=100)
-    fg.add_child(folium.CircleMarker(location=[lt, ln], radius=6, popup=folium.Popup(iframe), fill_color=color_assign(elev), color = 'grey', fill = True, fill_opacity=0.7))
+    fg1.add_child(folium.CircleMarker(location=[lt, ln], radius=6, popup=folium.Popup(iframe), fill_color=color_assign(elev), color = 'grey', fill = True, fill_opacity=0.7))
 
+fg2 =folium.FeatureGroup(name="Population")
 # add json data
-fg.add_child(folium. GeoJson(data=json.load(open('world.json', 'r', encoding='utf-8-sig')),
+fg2.add_child(folium. GeoJson(data=json.load(open('world.json', 'r', encoding='utf-8-sig')),
 style_function=lambda x: {'fillColor':country_color_assign(x['properties']['POP2005'])}))
 
-map.add_child(fg)
+
+map.add_child(fg1)
+map.add_child(fg2)
+map.add_child(folium.LayerControl())
 map.save("Map1.html")
