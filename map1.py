@@ -29,6 +29,15 @@ def color_assign(elev):
     else:
         return "red"
 
+# function to assign color to countries based on population
+def country_color_assign(pop2005):
+    if pop2005 < 10000000:
+        return "green"
+    elif 10000000 <= pop2005 < 20000000:
+        return 'orange'
+    else:
+        return 'red'
+
 # use zip to iterate through multiple lists at the same time.
 for lt, ln, elev, name in zip(lat, lon, elevation, name):
     # assign a point for each volcano
@@ -36,8 +45,8 @@ for lt, ln, elev, name in zip(lat, lon, elevation, name):
     fg.add_child(folium.CircleMarker(location=[lt, ln], radius=6, popup=folium.Popup(iframe), fill_color=color_assign(elev), color = 'grey', fill = True, fill_opacity=0.7))
 
 # add json data
-fg.add_child(folium.GeoJson(data=json.load(open('world.json', 'r', encoding='utf-8-sig')),
-style_function=lambda x: {'fillColor':'yellow'}))
+fg.add_child(folium. GeoJson(data=json.load(open('world.json', 'r', encoding='utf-8-sig')),
+style_function=lambda x: {'fillColor':country_color_assign(x['properties']['POP2005'])}))
 
 map.add_child(fg)
 map.save("Map1.html")
